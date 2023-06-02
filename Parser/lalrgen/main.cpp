@@ -62,7 +62,7 @@ void printTable(const vector<vector<action>> &actions) {
                 printf("r%d  ", actions[i][j].num);
                 break;
             case FAIL:
-                printf("NA   ", actions[i][j].num);
+                printf("NA   ");
                 break;
             }
             if (actions[i][j].type != FAIL && actions[i][j].num < 10) {
@@ -74,10 +74,10 @@ void printTable(const vector<vector<action>> &actions) {
 }
 
 int main() {
-    File *file = parse(new FileReader("syntax.lr"));
+    File *file = parse(new FileReader("syntax2.lr"));
     LRTable *table = new LRTable(file);
     printTable(table->getTable());
-    File *test = parse(new FileReader("syntax.lr"), table->getTable(), table->getMapping());
+    File *test = parse(new FileReader("syntax2.lr"), table->getTable(), table->getMapping());
     auto testRules = file2Rules(test);
     printRules(testRules);
 }
