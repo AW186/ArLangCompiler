@@ -1,4 +1,4 @@
-all: test
+all: product
 
 test: main.o rule.o lexer.o
 	g++ -o test main.o rule.o lexer.o
@@ -15,4 +15,9 @@ lexer.o: lexer.cpp lexer.hpp reader.hpp rule.hpp
 clean:
 	rm *.o
 	rm test
+
+product: rule.o lexer.o
+	cp rule.o ../product/obj
+	cp lexer.o ../product/obj
+
 	

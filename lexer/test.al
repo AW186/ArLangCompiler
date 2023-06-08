@@ -1,4 +1,5 @@
-int main() {
-    int x = 100 + 2;
+int main(int argc) {
+    int x;
+    x = (100 + 2);
     printf("hello");
 }

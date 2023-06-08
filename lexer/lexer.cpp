@@ -2,9 +2,47 @@
 #include "rule.hpp"
 #include <sstream>
 #include <string>
+#include <map>
+
+
+// |&^!+-*(){}[];=
+
+static bool initialized = false;
+static map<char, int> opMap;
+map<char, int> getOpMap() {
+    if (initialized) return opMap;
+    initialized = true;
+    opMap['|'] = OR;
+    opMap['&'] = AND;
+    opMap['^'] = XOR;
+    opMap['!'] = NOT;
+    opMap['+'] = PLUS;
+    opMap['-'] = MINUS;
+    opMap['*'] = TIMES;
+    opMap['/'] = DIV;
+    opMap['('] = LBRKT;
+    opMap[')'] = RBRKT;
+    opMap['{'] = LPAREN;
+    opMap['}'] = RPAREN;
+    opMap[';'] = ENDL;
+    opMap['='] = EQUAL;
+    return opMap;
+}
+
+int getKindWithStr(int kind, string val) {
+    switch (kind)
+    {
+    case OPRAND:
+        return getOpMap()[val[0]];
+    case ID:
+    default:
+        return kind;
+    }
+    return kind;
+}
 
 Token::Token(int kind, string val) {
-    this->mKind = kind;
+    this->mKind = getKindWithStr(kind, val);
     this->mVal = val;
 }
 
@@ -41,5 +79,6 @@ Token *Lexer::nextToken() {
         }
     }
     // cout << "end " << id << endl;
+    if (kind[id] == IGNORE) return nextToken();
     return new Token(kind[id], ss.str());
 }
