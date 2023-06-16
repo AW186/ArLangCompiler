@@ -14,7 +14,7 @@ syntaxparser.o: syntaxparser.cpp syntaxparser.hpp reader.hpp
 testcase:
 	gcc -E syntax.c -o syntax.lr
 
-clear:
+clean:
 	rm *.o
 	rm test
 
