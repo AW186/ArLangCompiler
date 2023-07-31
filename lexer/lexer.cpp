@@ -6,12 +6,23 @@
 
 
 // |&^!+-*(){}[];=
+static bool initializedID = false;
+static map<string, int> idMap;
+map<string, int> getIdMap() {
+    if (initializedID) return idMap;
+    initializedID   = true;
+    idMap["if"]     = IF;
+    idMap["else"]   = ELSE;
+    idMap["for"]    = FOR;
+    idMap["while"]  = WHILE;
+    return idMap;
+}
 
-static bool initialized = false;
+static bool initializedOP = false;
 static map<char, int> opMap;
 map<char, int> getOpMap() {
-    if (initialized) return opMap;
-    initialized = true;
+    if (initializedOP) return opMap;
+    initializedOP = true;
     opMap['|'] = OR;
     opMap['&'] = AND;
     opMap['^'] = XOR;
@@ -26,6 +37,8 @@ map<char, int> getOpMap() {
     opMap['}'] = RPAREN;
     opMap[';'] = ENDL;
     opMap['='] = EQUAL;
+    opMap['<'] = LESS;
+    opMap['>'] = GREATER;
     return opMap;
 }
 
@@ -35,6 +48,7 @@ int getKindWithStr(int kind, string val) {
     case OPRAND:
         return getOpMap()[val[0]];
     case ID:
+        if (getIdMap().count(val)) return getIdMap()[val];
     default:
         return kind;
     }

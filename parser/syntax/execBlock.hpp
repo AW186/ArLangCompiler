@@ -1,26 +1,20 @@
 #ifndef EXEC_BLOCK
 #define EXEC_BLOCK
 
-#include "exp.hpp"
-#include "decl.hpp"
 #include <stdio.h>
 #include <iostream>
 
 using namespace std;
 
+class AbstractLineContentSyntax: public AbstractSyntax {
+
+};
+
 class LineSyntax: public AbstractSyntax {
     int mType;
-    union {
-        DeclSyntax *decl;
-        ExpSyntax *exp;
-        struct {
-            char const *id;
-            ExpSyntax *exp;
-        } assign;
-    } u;
+    AbstractLineContentSyntax *line;
 public:
-    LineSyntax(string id, ExpSyntax *exp);
-    LineSyntax(int type, void *data);
+    LineSyntax(AbstractLineContentSyntax *data);
     int getType() override;
 };
 

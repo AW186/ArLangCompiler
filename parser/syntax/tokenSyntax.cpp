@@ -4,7 +4,7 @@
 //|&^!+-*/(){}[];=
 
 static bool vinitialized = false;
-static vector<int> synMap(26);
+static vector<int> synMap(28);
 static bool sinitialized = false;
 static set<string> types;
 
@@ -37,6 +37,11 @@ vector<int> getSynMap() {
     synMap[END] = SYN_END;
     synMap[ID] = SYN_ID;
     synMap[INTMED] = SYN_IMM;
+    synMap[FOR] = SYN_FOR;
+    synMap[IF] = SYN_IF;
+    synMap[ELSE] = SYN_ELSE;
+    synMap[LESS] = SYN_OP;
+    synMap[GREATER] = SYN_OP;
     return synMap;
 };
 
@@ -44,7 +49,7 @@ vector<int> getSynMap() {
 TokenSyntax::TokenSyntax(Token *token) {
     this->mToken = token;
     this->mType = getSynMap()[token->getKind()];
-    printf("token type %d val %s\n", token->getKind(), token->getVal().c_str());
+    printf("token type %d mType: %d val %s\n", token->getKind(), this->mType, token->getVal().c_str());
     if (this->mType == SYN_ID && getTypes().count(token->getVal()))
         this->mType = SYN_TYPE;
 }

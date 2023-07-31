@@ -38,6 +38,10 @@
 #define FUNC_T(s)       ((FuncSyntax *)(s.data))
 #define DECL_T(s)       ((DeclSyntax *)(s.data))
 #define CALL_T(s)       ((CallSyntax *)(s.data))
+#define IF_T(s)         ((IfblkSyntax *)(s.data))
+#define ELSE_T(s)       ((ElseblkSyntax *)(s.data))
+#define ELIF_T(s)       ((ElseifblkSyntax *)(s.data))
+#define FOR_T(s)        ((ForblkSyntax *)(s.data))
 #define PROGRAM_T(s)    ((ProgramSyntax *)(s.data))
 
 stackblk pop(deque<stackblk> &stack) {
@@ -182,7 +186,7 @@ stackblk r11(deque<stackblk> &stack) {
 stackblk r12(deque<stackblk> &stack) {
     stackblk res;
     auto decl = pop(stack, SYN_DECL);
-    res.data = new LineSyntax(SYN_DECL, DECL_T(decl));
+    res.data = new LineSyntax(DECL_T(decl));
     return res;
 }
 // /LINE>/DEF
@@ -191,14 +195,13 @@ stackblk r13(deque<stackblk> &stack) {
     printf("r13 not finished");
     return res;
 }
-// /LINE>/ID/ASSIGN/EXP/ENDL
+// /EXP>/ID/ASSIGN/EXP
 stackblk r14(deque<stackblk> &stack) {
     stackblk res;
-    auto endl = pop(stack, SYN_ENDL);
     auto exp = pop(stack, SYN_EXP);
     auto assign = pop(stack, SYN_ASSIGN);
     auto id = pop(stack, SYN_ID);
-    res.data = new LineSyntax(TOKEN_T(id)->getToken()->getVal(), EXP_T(exp));
+    res.data = new ExpSyntax(TOKEN_T(id), TOKEN_T(assign), EXP_T(exp));
     return res;
 }
 // /LINE>/EXP/ENDL
@@ -206,7 +209,7 @@ stackblk r15(deque<stackblk> &stack) {
     stackblk res;
     auto endl = pop(stack, SYN_ENDL);
     auto exp = pop(stack, SYN_EXP);
-    res.data = new LineSyntax(SYN_EXP, EXP_T(exp));
+    res.data = new LineSyntax(EXP_T(exp));
     return res;
 }
 // /CALL>/ID/LBR/EXPS/RBR
@@ -284,7 +287,110 @@ stackblk r24(deque<stackblk> &stack) {
     res.data = new ProgramSyntax(FUNC_T(func), NULL);
     return res;
 }
+// /SYN_LINE>/SYN_IFBLK
+stackblk r25(deque<stackblk> &stack) {
+    stackblk res;
+    auto ifblk  = pop(stack, SYN_IFBLK);
+    res.data    = new LineSyntax(IF_T(ifblk));
+    return res;
+}
+// /SYN_ELSEBLK>/SYN_ELSE/SYN_BLOCK
+stackblk r26(deque<stackblk> &stack) {
+    stackblk res;
+    auto blk = pop(stack, SYN_BLOCK);
+    auto el  = pop(stack, SYN_ELSE);
+    res.data = new ElseblkSyntax(BLOCK_T(blk));
+    return res;
+}
+// /SYN_ELIFBLK>/SYN_ELIF/SYN_EXP/SYN_BLOCK
 
+stackblk r27(deque<stackblk> &stack) {
+    stackblk res;
+    auto blk    = pop(stack, SYN_BLOCK);
+    auto exp    = pop(stack, SYN_EXP);
+    auto elif   = pop(stack, SYN_ELIF);
+    res.data    = new ElseifblkSyntax(EXP_T(exp), BLOCK_T(blk));
+    return res;
+}
+// /SYN_ELIFBLK>/SYN_ELIF/SYN_EXP/SYN_BLOCK/SYN_ELSEBLK
+
+stackblk r28(deque<stackblk> &stack) {
+    stackblk res;
+    auto elblk  = pop(stack, SYN_ELSEBLK);
+    auto blk    = pop(stack, SYN_BLOCK);
+    auto exp    = pop(stack, SYN_EXP);
+    auto elif   = pop(stack, SYN_ELIF);
+    res.data    = new ElseifblkSyntax(EXP_T(exp), BLOCK_T(blk), ELSE_T(elblk));
+    return res;
+}
+// /SYN_ELIFBLK>/SYN_ELIF/SYN_EXP/SYN_BLOCK/SYN_ELIFBLK
+
+stackblk r29(deque<stackblk> &stack) {
+    stackblk res;
+    auto elifblk    = pop(stack, SYN_ELIFBLK);
+    auto blk        = pop(stack, SYN_BLOCK);
+    auto exp        = pop(stack, SYN_EXP);
+    auto elif       = pop(stack, SYN_ELIF);
+    res.data        = new ElseifblkSyntax(EXP_T(exp), BLOCK_T(blk), ELIF_T(elifblk));
+    return res;
+}
+// /SYN_IFBLK>/SYN_IF/SYN_EXP/SYN_BLOCK
+
+stackblk r30(deque<stackblk> &stack) {
+    stackblk res;
+    auto blk    = pop(stack, SYN_BLOCK);
+    auto exp    = pop(stack, SYN_EXP);
+    auto ifsyn  = pop(stack, SYN_IF);
+    res.data    = new IfblkSyntax(EXP_T(exp), BLOCK_T(blk));
+    return res;
+}
+// /SYN_IFBLK>/SYN_IF/SYN_EXP/SYN_BLOCK/SYN_ELSEBLK
+
+stackblk r31(deque<stackblk> &stack) {
+    stackblk res;
+    auto elblk  = pop(stack, SYN_ELSEBLK);
+    auto blk    = pop(stack, SYN_BLOCK);
+    auto exp    = pop(stack, SYN_EXP);
+    auto ifsyn  = pop(stack, SYN_IF);
+    res.data    = new ElseifblkSyntax(EXP_T(exp), BLOCK_T(blk), ELSE_T(elblk));
+    return res;
+}
+
+// /SYN_IFBLK>/SYN_IF/SYN_EXP/SYN_BLOCK/SYN_ELIFBLK
+
+stackblk r32(deque<stackblk> &stack) {
+    stackblk res;
+    auto elifblk    = pop(stack, SYN_ELIFBLK);
+    auto blk        = pop(stack, SYN_BLOCK);
+    auto exp        = pop(stack, SYN_EXP);
+    auto ifsyn      = pop(stack, SYN_IF);
+    res.data        = new ElseifblkSyntax(EXP_T(exp), BLOCK_T(blk), ELIF_T(elifblk));
+    return res;
+}
+
+// /SYN_LINE>/SYN_FORBLK
+
+stackblk r33(deque<stackblk> &stack) {
+    stackblk res;
+    auto forblk = pop(stack, SYN_FORBLK);
+    res.data    = new LineSyntax(FOR_T(forblk));
+    return res;
+}
+// /SYN_FORBLK>/SYN_FOR/SYN_LINE/SYN_EXP/SYN_ENDL/SYN_LINE/SYN_BLOCK
+
+stackblk r34(deque<stackblk> &stack) {
+    stackblk res;
+    auto blk    = pop(stack, SYN_BLOCK);
+    auto right  = pop(stack, SYN_LINE);
+    auto end    = pop(stack, SYN_ENDL);
+    auto exp    = pop(stack, SYN_EXP);
+    auto left   = pop(stack, SYN_LINE);
+    auto for_s  = pop(stack, SYN_FOR);
+    res.data    = new ForblkSyntax(LINE_T(left), EXP_T(exp), LINE_T(right), BLOCK_T(blk));
+    return res;
+}
+// /SYN_LINE>/SYN_WHILEBLK
+// /SYN_WHILEBLK>/SYN_WHILE/SYN_EXP/SYN_BLOCK
 reduce_fun reduce[ARLANG_RULES] = {
     r0,
     r1,
@@ -310,5 +416,15 @@ reduce_fun reduce[ARLANG_RULES] = {
     r21,
     r22,
     r23,
-    r24
+    r24,
+    r25,
+    r26,
+    r27,
+    r28,
+    r29,
+    r30,
+    r31,
+    r32,
+    r33,
+    r34
 };

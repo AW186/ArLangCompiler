@@ -32,7 +32,7 @@ void panic(const char *str) {
 11                      r2  |
 12                  r3  r3  |
 13  r7          r7  r7  r7  |
-14                  r4      |
+14                  r4  r4  |
 
 */
 action lalrtable[15][10] = {
@@ -50,7 +50,7 @@ action lalrtable[15][10] = {
     {NA,    NA,     NA,     NA,     R(2),   NA,     NA,     NA,     NA,     NA},
     {NA,    NA,     NA,     R(3),   R(3),   NA,     NA,     NA,     NA,     NA},
     {R(7),  NA,     R(7),   R(7),   R(7),   NA,     NA,     NA,     NA,     NA},
-    {NA,    NA,     NA,     R(4),   NA,     NA,     NA,     NA,     NA,     NA}
+    {NA,    NA,     NA,     R(4),   R(4),     NA,     NA,     NA,     NA,     NA}
 };
 
 typedef struct stackblk {
@@ -280,18 +280,20 @@ File *parse(Reader *reader) {
     map<int, int> dict = getMap();
     // printf("State g%d\n", state);
     // printf("%c\n", *(char *)((int *)(&next)));
+    int count = next == '\n' || next == '\r';
     while (1) {
         action act = lalrtable[state][dict[next]];
         switch (act.type)
         {
         case FAIL:
-            printf("Syntax error on state %d, with entry %d\n", state, next);
+            printf("Syntax error on state %d, at line %d, with entry %d\n", state, count, next);
             exit(-1);
         case SHIFT:
             state = act.num;
             stack.push_back(makeStackBlk(next, state, (void *)next));
             c = reader->getc();
-            next = c;
+            next = c;            
+            // count += next == '\n' || next == '\r';
             // printf("State s%d\n", state);
             // printf("%c\n", *(char *)((int *)(&next)));
             break;
@@ -309,7 +311,7 @@ File *parse(Reader *reader) {
             // printf("State r%d, to state %d\n", act.num, state);
             break;
         case ACCEPT:
-            printf("finish stack size: %d\n", stack.size());
+            // printf("finish stack size: %d\n", stack.size());
             return stack.back().u.file;
         default:
             break;
@@ -330,7 +332,7 @@ File *parse(Reader *reader, vector<vector<action>> lrtable, map<int, int> mappin
         switch (act.type)
         {
         case FAIL:
-            printf("Syntax error on state %d, with entry %d\n", state, next);
+            // printf("Syntax error on state %d, at line %d, with entry %d\n", state, count, next);
             exit(-1);
         case SHIFT:
             state = act.num;

@@ -4,16 +4,17 @@
 #include <iostream>
 #include "abstractSyntax.hpp"
 #include "tokenSyntax.hpp"
+#include "execBlock.hpp"
 
 using namespace std;
 
-class ExpSyntax: public AbstractSyntax {
+class ExpSyntax: public AbstractLineContentSyntax {
     AbstractSyntax *mVal;
     TokenSyntax *mOp;
     ExpSyntax *mExp;
 public:
     ExpSyntax(AbstractSyntax *data);
-    ExpSyntax(ExpSyntax *lexp, TokenSyntax *op, ExpSyntax *rexp);
+    ExpSyntax(AbstractSyntax *lexp, TokenSyntax *op, ExpSyntax *rexp);
     int getType() override;
 };
 

@@ -32,6 +32,8 @@
 #define ID      23
 #define IGNORE  24
 #define OPRAND  25
+#define LESS    26
+#define GREATER 27
 
 #define MAXRULE 15
 #define MASKBLKSIZE 32

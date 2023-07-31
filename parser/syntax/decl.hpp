@@ -2,8 +2,9 @@
 #define DECL_HPP
 
 #include "abstractSyntax.hpp"
+#include "execBlock.hpp"
 
-class DeclSyntax: public AbstractSyntax {
+class DeclSyntax: public AbstractLineContentSyntax {
     string mId;
     string mType;
 public:

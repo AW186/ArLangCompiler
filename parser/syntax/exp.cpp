@@ -1,6 +1,6 @@
 #include "../syntax.hpp"
 
-ExpSyntax::ExpSyntax(ExpSyntax *lexp, TokenSyntax *op, ExpSyntax *rexp) {
+ExpSyntax::ExpSyntax(AbstractSyntax *lexp, TokenSyntax *op, ExpSyntax *rexp) {
     this->mVal = lexp;
     this->mOp = op;
     this->mExp = rexp;
