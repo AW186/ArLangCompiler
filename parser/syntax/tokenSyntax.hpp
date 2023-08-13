@@ -15,6 +15,9 @@ public:
     TokenSyntax(Token *token);
     int getType() override;
     Token *getToken();
+    string generateASM(ContextController *ctx) override;
+    Symbol getSymbol() override;
+    void print() override;
 };
 
 #endif

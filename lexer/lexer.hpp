@@ -5,6 +5,7 @@
 #include "rule.hpp"
 #include <iostream>
 #include <vector>
+#include <cstdint>
 
 using namespace std;
 

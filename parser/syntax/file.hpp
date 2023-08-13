@@ -9,6 +9,8 @@ private:
 public:
     int getType() override;
     FileSyntax(ProgramSyntax *program);
+    string generateASM(ContextController *ctx) override;
+    void print() override;
 };
 
 #endif

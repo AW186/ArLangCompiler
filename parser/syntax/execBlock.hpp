@@ -16,6 +16,8 @@ class LineSyntax: public AbstractSyntax {
 public:
     LineSyntax(AbstractLineContentSyntax *data);
     int getType() override;
+    string generateASM(ContextController *ctx) override;
+    void print() override;
 };
 
 
@@ -25,6 +27,8 @@ class LinesSyntax: public AbstractSyntax {
 public:
     LinesSyntax(LineSyntax *line, LinesSyntax *next);
     int getType() override;
+    string generateASM(ContextController *ctx) override;
+    void print() override;
 };
 
 class ExecBlockSyntax: public AbstractSyntax {
@@ -32,6 +36,8 @@ class ExecBlockSyntax: public AbstractSyntax {
 public:
     ExecBlockSyntax(LinesSyntax *lines);
     int getType() override;
+    string generateASM(ContextController *ctx) override;
+    void print() override;
 };
 
 

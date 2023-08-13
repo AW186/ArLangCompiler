@@ -94,7 +94,7 @@ vector<State *> makeArLangRule() {
     const mask alpha = getMask(ALPHA);
     const mask reg = getMask(REG);
     const mask digit = getMask(DIGIT);
-    const mask op = getMask("|&^!+-*(){}[];=<>");
+    const mask op = getMask(",|&^!+-*(){}[];=<>");
     //number
     link(states, digit, 0, 2);
     link(states, digit, 2, 2);

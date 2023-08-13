@@ -39,6 +39,7 @@ map<char, int> getOpMap() {
     opMap['='] = EQUAL;
     opMap['<'] = LESS;
     opMap['>'] = GREATER;
+    opMap[','] = COMMA;
     return opMap;
 }
 

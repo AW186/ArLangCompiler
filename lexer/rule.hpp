@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <cstdint>
 
 //Types:
 #define NOTEND  -1
@@ -34,6 +35,7 @@
 #define OPRAND  25
 #define LESS    26
 #define GREATER 27
+#define COMMA 27
 
 #define MAXRULE 15
 #define MASKBLKSIZE 32

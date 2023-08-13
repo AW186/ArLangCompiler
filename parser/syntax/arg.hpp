@@ -14,6 +14,8 @@ private:
 public:
     ArgsSyntax(string type, string id, ArgsSyntax *next);
     int getType() override;
+    string generateASM(ContextController *ctx) override;
+    void print() override;
 };
 
 #endif

@@ -16,6 +16,9 @@ public:
     ExpSyntax(AbstractSyntax *data);
     ExpSyntax(AbstractSyntax *lexp, TokenSyntax *op, ExpSyntax *rexp);
     int getType() override;
+    string generateASM(ContextController *ctx, int &reg);
+    string generateASM(ContextController *ctx) override;
+    void print() override;
 };
 
 class ExpsSyntax: public AbstractSyntax {
@@ -25,6 +28,10 @@ private:
 public:
     ExpsSyntax(ExpSyntax *exp, ExpsSyntax *next);
     int getType() override;
+    string generateASMReg(ContextController *ctx, int index);
+    string generateASM(ContextController *ctx, int index);
+    string generateASM(ContextController *ctx) override;   
+    void print() override;
 };
 
 #endif

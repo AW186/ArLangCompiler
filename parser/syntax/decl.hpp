@@ -10,6 +10,9 @@ class DeclSyntax: public AbstractLineContentSyntax {
 public:
     DeclSyntax(string type, string id);
     int getType() override;
+    string generateASM(ContextController *ctx) override;
+    Symbol getSymbol() override;
+    void print() override;
 };
 
 #endif

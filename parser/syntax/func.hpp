@@ -16,6 +16,9 @@ class FuncSyntax: public AbstractSyntax {
 public:
     FuncSyntax(string type, string id, ArgsSyntax *args, ExecBlockSyntax *blk);
     int getType() override;
+    string generateASM(ContextController *ctx) override;
+    Symbol getSymbol() override;
+    void print() override;
 };
 
 class CallSyntax: public AbstractSyntax {
@@ -24,6 +27,8 @@ class CallSyntax: public AbstractSyntax {
 public:
     CallSyntax(string id, ExpsSyntax *exps);
     int getType() override;
+    string generateASM(ContextController *ctx) override;
+    void print() override;
 };
 
 #endif

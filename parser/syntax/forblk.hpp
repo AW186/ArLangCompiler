@@ -12,6 +12,8 @@ private:
 public:
     int getType() override;
     ForblkSyntax(LineSyntax *left, ExpSyntax *mExp, LineSyntax *right, ExecBlockSyntax *blk);
+    string generateASM(ContextController *ctx) override;
+    void print() override;
 };
 
 

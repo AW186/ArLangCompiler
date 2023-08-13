@@ -7,3 +7,13 @@ FileSyntax::FileSyntax(ProgramSyntax *program) {
 int FileSyntax::getType() {
     return SYN_FILE;
 }
+
+string FileSyntax::generateASM(ContextController *ctx) {
+    return this->mProgram->generateASM(ctx);
+}
+
+void FileSyntax::print() {
+    cout << "FILE BEGIN" << endl;
+    this->mProgram->print();
+    cout << "FILE END" << endl;
+}

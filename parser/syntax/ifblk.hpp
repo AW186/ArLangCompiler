@@ -13,6 +13,8 @@ private:
 public:
     int getType() override;
     ElseblkSyntax(ExecBlockSyntax *blk);
+    string generateASM(ContextController *ctx) override;
+    void print() override;
 };
 
 class ElseifblkSyntax: public AbstractElseSyntax {
@@ -23,6 +25,8 @@ private:
 public:
     int getType() override;
     ElseifblkSyntax(ExpSyntax *exp, ExecBlockSyntax *blk, AbstractElseSyntax *el = NULL);
+    string generateASM(ContextController *ctx) override;
+    void print() override;
 };
 
 class IfblkSyntax: public AbstractLineContentSyntax {
@@ -33,6 +37,8 @@ private:
 public:
     int getType() override;
     IfblkSyntax(ExpSyntax *exp, ExecBlockSyntax *blk, AbstractElseSyntax *el = NULL);
+    string generateASM(ContextController *ctx) override;
+    void print() override;
 };
 
 #endif

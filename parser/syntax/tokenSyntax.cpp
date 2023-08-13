@@ -42,6 +42,7 @@ vector<int> getSynMap() {
     synMap[ELSE] = SYN_ELSE;
     synMap[LESS] = SYN_OP;
     synMap[GREATER] = SYN_OP;
+    synMap[COMMA] = SYN_COMMA;
     return synMap;
 };
 
@@ -60,4 +61,20 @@ int TokenSyntax::getType() {
 
 Token *TokenSyntax::getToken() {
     return mToken;
+}
+    
+string TokenSyntax::generateASM(ContextController *ctx) {
+    return "token should not generate ASM\n";
+}
+
+
+Symbol TokenSyntax::getSymbol() {
+    return Symbol {
+        0,
+        this->mToken->getVal()
+    };
+}
+
+void TokenSyntax::print() {
+    cout << "token {" << this->mType << ", " << this->mToken->getVal() << "}";
 }
