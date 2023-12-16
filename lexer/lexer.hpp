@@ -17,6 +17,7 @@ public:
     Token(int kind, string val);
     int getKind();
     string getVal();
+    void replaceImm(string val);
 };
 //Interface:
 class Lexer {

@@ -69,6 +69,10 @@ string Token::getVal() {
     return mVal;
 }
 
+void Token::replaceImm(string val) {
+    if (this->mKind == INTMED) this->mVal = val;
+}
+
 Token *Lexer::nextToken() {
     char c;
     stringstream ss;

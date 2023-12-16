@@ -11,6 +11,8 @@ public:
     FileSyntax(ProgramSyntax *program);
     string generateASM(ContextController *ctx) override;
     void print() override;
+    void fixLiteral(vector<string> & lines) override;
+    void declaration(vector<string> & lines) override;
 };
 
 #endif

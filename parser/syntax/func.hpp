@@ -4,6 +4,7 @@
 #include "abstractSyntax.hpp"
 #include "execBlock.hpp"
 #include "exp.hpp"
+#include "arg.hpp"
 #include <iostream>
 
 using namespace std;
@@ -19,6 +20,8 @@ public:
     string generateASM(ContextController *ctx) override;
     Symbol getSymbol() override;
     void print() override;
+    void fixLiteral(vector<string> & lines) override;
+    void declaration(vector<string> & lines) override;
 };
 
 class CallSyntax: public AbstractSyntax {
@@ -29,6 +32,7 @@ public:
     int getType() override;
     string generateASM(ContextController *ctx) override;
     void print() override;
+    void fixLiteral(vector<string> & lines) override;
 };
 
 #endif

@@ -1,10 +1,13 @@
 #include "../syntax.hpp"
+#include "syntaxDefine.hpp"
+#include "tokenSyntax.hpp"
+#include <sstream>
 #include <vector>
 #include <set>
 //|&^!+-*/(){}[];=
 
 static bool vinitialized = false;
-static vector<int> synMap(28);
+static vector<int> synMap(32);
 static bool sinitialized = false;
 static set<string> types;
 
@@ -50,7 +53,7 @@ vector<int> getSynMap() {
 TokenSyntax::TokenSyntax(Token *token) {
     this->mToken = token;
     this->mType = getSynMap()[token->getKind()];
-    printf("token type %d mType: %d val %s\n", token->getKind(), this->mType, token->getVal().c_str());
+    // printf("token type %d mType: %d val %s\n", token->getKind(), this->mType, token->getVal().c_str());
     if (this->mType == SYN_ID && getTypes().count(token->getVal()))
         this->mType = SYN_TYPE;
 }
@@ -78,3 +81,25 @@ Symbol TokenSyntax::getSymbol() {
 void TokenSyntax::print() {
     cout << "token {" << this->mType << ", " << this->mToken->getVal() << "}";
 }
+
+static int immID = 0;
+
+void TokenSyntax::fixLiteral(vector<string> & lines) {
+    if (this->mType == SYN_IMM) {
+        stringstream ss;
+        stringstream newToken;
+        if (this->mToken->getVal()[0] != '\"') return;
+        ss << "imm" << immID << " " << this->mToken->getVal() << " " << (this->mToken->getVal().size() - 2) << endl;
+        newToken << "imm" << immID;
+        immID++;
+        this->mToken->replaceImm(newToken.str());
+        lines.push_back(ss.str());
+    }
+}
+
+
+
+
+
+
+

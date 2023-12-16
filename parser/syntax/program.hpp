@@ -5,11 +5,6 @@
 #include "func.hpp"
 #include "decl.hpp"
 
-union ProgramU {
-    FuncSyntax *func;
-    StructSyntax *stct;
-    DeclSyntax *decl;
-};
 
 class ProgramSyntax: public AbstractSyntax {
 private:
@@ -21,6 +16,8 @@ public:
     string generateASM(ContextController *ctx) override;
     void makeGST(map<string, Symbol> &gst);
     void print() override;
+    void fixLiteral(vector<string> & lines) override;
+    void declaration(vector<string> & lines) override;
 };
 
 #endif

@@ -19,6 +19,7 @@ public:
     string generateASM(ContextController *ctx, int &reg);
     string generateASM(ContextController *ctx) override;
     void print() override;
+    void fixLiteral(vector<string> & lines) override;
 };
 
 class ExpsSyntax: public AbstractSyntax {
@@ -32,6 +33,7 @@ public:
     string generateASM(ContextController *ctx, int index);
     string generateASM(ContextController *ctx) override;   
     void print() override;
+    void fixLiteral(vector<string> & lines) override;
 };
 
 #endif

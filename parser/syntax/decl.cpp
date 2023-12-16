@@ -1,4 +1,5 @@
 #include "../syntax.hpp"
+#include "decl.hpp"
 #include <sstream>
 
 using namespace std;
@@ -18,7 +19,7 @@ string DeclSyntax::generateASM(ContextController *ctx) {
         ss << ctx->addSymbol(Symbol {typeFromStr(this->mType), this->mId}) << endl;
         return ss.str();
     }
-    ss << this->mId << ": dq 0" << endl;
+    return ss.str();
 }
 
 Symbol DeclSyntax::getSymbol() {
@@ -28,3 +29,11 @@ Symbol DeclSyntax::getSymbol() {
 void DeclSyntax::print() {
     cout << "Declare " << mId << " " << mType;
 }
+
+void DeclSyntax::declaration(vector<string> & lines) {
+    lines.push_back(this->getSymbol().name);
+}
+
+void DeclSyntax::fixLiteral(vector<string> & lines) {
+}
+

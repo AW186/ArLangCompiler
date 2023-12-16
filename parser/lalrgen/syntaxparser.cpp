@@ -282,20 +282,21 @@ File *parse(Reader *reader) {
     // printf("%c\n", *(char *)((int *)(&next)));
     int count = next == '\n' || next == '\r';
     while (1) {
+        // printf("next id: %d, char: %c\n", next, next);
         action act = lalrtable[state][dict[next]];
         switch (act.type)
         {
         case FAIL:
-            printf("Syntax error on state %d, at line %d, with entry %d\n", state, count, next);
+            // printf("Syntax error on state %d, at line %d, with entry %d\n", state, count, next);
             exit(-1);
         case SHIFT:
             state = act.num;
             stack.push_back(makeStackBlk(next, state, (void *)next));
             c = reader->getc();
             next = c;            
-            // count += next == '\n' || next == '\r';
+            count += next == '\n' || next == '\r';
             // printf("State s%d\n", state);
-            // printf("%c\n", *(char *)((int *)(&next)));
+            // printf("id: %d, char: %c\n", next, next);
             break;
         case GOTO:
             state = act.num;

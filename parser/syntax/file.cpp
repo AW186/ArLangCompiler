@@ -17,3 +17,11 @@ void FileSyntax::print() {
     this->mProgram->print();
     cout << "FILE END" << endl;
 }
+void FileSyntax::fixLiteral(vector<string> & lines) {
+    cout << "fix files" << endl;
+    this->mProgram->fixLiteral(lines);
+}
+
+void FileSyntax::declaration(vector<string> & lines) {
+    this->mProgram->declaration(lines);
+}

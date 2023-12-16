@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 #include <iostream>
-
+#include "abstractSyntax.hpp"
 using namespace std;
 
 class AbstractLineContentSyntax: public AbstractSyntax {
@@ -18,6 +18,7 @@ public:
     int getType() override;
     string generateASM(ContextController *ctx) override;
     void print() override;
+    void fixLiteral(vector<string> & lines) override;
 };
 
 
@@ -29,6 +30,7 @@ public:
     int getType() override;
     string generateASM(ContextController *ctx) override;
     void print() override;
+    void fixLiteral(vector<string> & lines) override;
 };
 
 class ExecBlockSyntax: public AbstractSyntax {
@@ -38,6 +40,7 @@ public:
     int getType() override;
     string generateASM(ContextController *ctx) override;
     void print() override;
+    void fixLiteral(vector<string> & lines) override;
 };
 
 

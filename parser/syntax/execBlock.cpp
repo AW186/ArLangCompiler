@@ -1,4 +1,5 @@
 #include "../syntax.hpp"
+#include "execBlock.hpp"
 #include <sstream>
 
 using namespace std;
@@ -12,9 +13,8 @@ int LineSyntax::getType() {
 }
     
 string LineSyntax::generateASM(ContextController *ctx) {
-    cout << "line gen" << endl;
-    this->print();
-    return this->line->generateASM(ctx);
+    string res = this->line->generateASM(ctx);
+    return res;
 }
 
 void LineSyntax::print() {
@@ -65,3 +65,20 @@ void ExecBlockSyntax::print() {
     this->mLines->print();
     cout << "}";
 }
+
+void ExecBlockSyntax::fixLiteral(vector<string> & lines) {
+    this->mLines->fixLiteral(lines);
+}
+
+void LinesSyntax::fixLiteral(vector<string> & lines) {
+    this->mLine->fixLiteral(lines);
+    if (this->mNext) this->mNext->fixLiteral(lines);
+}
+
+void LineSyntax::fixLiteral(vector<string> & lines) {
+    this->line->fixLiteral(lines);
+}
+
+
+
+

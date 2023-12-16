@@ -1,4 +1,5 @@
 #include "../syntax.hpp"
+#include "exp.hpp"
 #include <sstream>
 
 ExpSyntax::ExpSyntax(AbstractSyntax *lexp, TokenSyntax *op, ExpSyntax *rexp) {
@@ -24,17 +25,23 @@ string ExpSyntax::generateASM(ContextController *ctx, int &reg) {
     {
     case SYN_IMM:
         ss << ctx->useRegisterForImm(this->mVal->getSymbol().name, reg) << endl;
+        cout << "reg " << reg << endl;
         break;
     case SYN_ID:
         ss << ctx->useRegisterForCopy(this->mVal->getSymbol().name, reg, 0) << endl;
+        cout << "reg " << reg << endl;
         break;
     case SYN_CALL:
         ss << this->mVal->generateASM(ctx);
         reg = _RAX;
+        cout << "reg " << reg << endl;
         break;
+    case SYN_EXP:
+        ss << ((ExpSyntax *)(this->mVal))->generateASM(ctx, reg) << endl;
     default:
         break;
     }
+    cout << "exp generate asm 2" << endl;
     if (!this->mOp) {
         cout << ss.str() << endl;
         return ss.str();
@@ -42,26 +49,35 @@ string ExpSyntax::generateASM(ContextController *ctx, int &reg) {
     switch (this->mOp->getToken()->getKind())
     {
     case OR:
-        return ctx->bwor(new RegisterValue(reg), new SymbolValue(this->mVal->getSymbol().name));
+        ss << ctx->bwor(new RegisterValue(reg), new SymbolValue(this->mVal->getSymbol().name));
+        break;
     case XOR:
-        return ctx->bwxor(new RegisterValue(reg), new SymbolValue(this->mVal->getSymbol().name));
+        ss << ctx->bwxor(new RegisterValue(reg), new SymbolValue(this->mVal->getSymbol().name));
+        break;
     case AND:
-        return ctx->bwand(new RegisterValue(reg), new SymbolValue(this->mVal->getSymbol().name));
+        ss << ctx->bwand(new RegisterValue(reg), new SymbolValue(this->mVal->getSymbol().name));
+        break;
     case PLUS:
-        return ctx->add(new RegisterValue(reg), new SymbolValue(this->mVal->getSymbol().name));
+        ss << ctx->add(new RegisterValue(reg), new SymbolValue(this->mVal->getSymbol().name));
+        break;
     case MINUS:
-        return ctx->minus(new RegisterValue(reg), new SymbolValue(this->mVal->getSymbol().name));
+        ss << ctx->minus(new RegisterValue(reg), new SymbolValue(this->mVal->getSymbol().name));
+        break;
     case TIMES:
-        return ctx->multiply(new RegisterValue(reg), new SymbolValue(this->mVal->getSymbol().name));
+        ss << ctx->multiply(new RegisterValue(reg), new SymbolValue(this->mVal->getSymbol().name));
+        break;
     case DIV:
-        return ctx->div(new RegisterValue(reg), new SymbolValue(this->mVal->getSymbol().name));
+        ss << ctx->div(new RegisterValue(reg), new SymbolValue(this->mVal->getSymbol().name));
+        break;
     case EQUAL:
-        return ctx->assign(new RegisterValue(reg), new SymbolValue(this->mVal->getSymbol().name));
-    
+        ss << ctx->assign(new RegisterValue(reg), new SymbolValue(this->mVal->getSymbol().name));
+        break;
     default:
         break;
     }
-    cout << "exp generate asm done" << endl;
+    this->print();
+    cout << endl << "exp generate asm done with reg" << reg << endl;
+    return ss.str();
 }
 
 string ExpSyntax::generateASM(ContextController *ctx) {
@@ -93,7 +109,7 @@ int ExpsSyntax::getType() {
 string ExpsSyntax::generateASMReg(ContextController *ctx, int index) {
     stringstream ss;
     cout << "gen asm reg" << endl;
-    ss << "mov " << registerStrings[index] << ", [rsp-" << (CALLEESAVE_PLHD + index * 8) << "]" << endl;
+    ss << "    mov " << registerStrings[index] << ", [rsp-" << (CALLEESAVE_PLHD + index * 8) << "]" << endl;
     
     cout << "gen asm reg" << endl;
     if (this->mNext) ss << this->mNext->generateASMReg(ctx, index+1);
@@ -103,7 +119,7 @@ string ExpsSyntax::generateASM(ContextController *ctx, int index) {
     stringstream ss;
     int reg;
     ss << this->mExp->generateASM(ctx, reg);
-    ss << "mov [rsp-" << (CALLEESAVE_PLHD + index * 8) << "], " << registerStrings[reg] << endl;
+    ss << "    mov [rsp-" << (CALLEESAVE_PLHD + index * 8) << "], " << registerStrings[reg] << endl;
     if (this->mNext) ss << this->mNext->generateASM(ctx, index+1);
     return ss.str();
 }
@@ -118,3 +134,26 @@ void ExpsSyntax::print() {
     if (this->mNext) this->mNext->print();
     cout << ")";
 }
+
+void ExpSyntax::fixLiteral(vector<string> & lines) {
+    if (this->mVal) this->mVal->fixLiteral(lines);
+    if (this->mExp) this->mExp->fixLiteral(lines);
+}
+
+void ExpsSyntax::fixLiteral(vector<string> & lines) {
+    if (this->mExp) this->mExp->fixLiteral(lines);
+    if (this->mNext) this->mNext->fixLiteral(lines);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

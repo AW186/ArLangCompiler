@@ -35,7 +35,8 @@
 #define OPRAND  25
 #define LESS    26
 #define GREATER 27
-#define COMMA 27
+#define COMMA   28
+#define RETURN  29
 
 #define MAXRULE 15
 #define MASKBLKSIZE 32

@@ -137,6 +137,8 @@ public:
     string popCaller();
     string saveCallee();
     string popCallee();
+    string generateGlobalFunc();
+    string generateGlobalVar();
 };
 
 #endif

@@ -16,5 +16,6 @@
 #include "syntax/file.hpp"
 #include "syntax/ifblk.hpp"
 #include "syntax/forblk.hpp"
+#include "syntax/return.hpp"
 
 #endif

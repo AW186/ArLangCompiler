@@ -18,6 +18,7 @@ public:
     string generateASM(ContextController *ctx) override;
     Symbol getSymbol() override;
     void print() override;
+    void fixLiteral(vector<string> & lines) override;
 };
 
 #endif

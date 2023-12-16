@@ -1,4 +1,5 @@
 #include "../syntax.hpp"
+#include "forblk.hpp"
 #include <sstream>
 
 int loopID = 0;
@@ -22,14 +23,17 @@ string ForblkSyntax::generateASM(ContextController *ctx) {
     loopss << "LOOP" << loopID++;
     string loop = loopss.str();
     ss << loop << ":" << endl;
-    int reg;
+    int reg = 200;
     ss << this->mExp->generateASM(ctx, reg);
+    cout << "for exp gen done" << endl;
     ss << ctx->updateZS(new RegisterValue(reg));
+    cout << "for exp gen done" << endl;
     ss << ctx->cjump("END" + loop);
+    cout << "for exp gen done" << endl;
     ss << this->mBlock->generateASM(ctx);
     ss << this->mRight->generateASM(ctx) ;
     ss << ctx->jump(loop);
-    ss << "END" << loop << ":" << endl;
+    ss << "END" << loop << ":";
     return ss.str();
 }
 
@@ -41,3 +45,15 @@ void ForblkSyntax::print() {
     cout << ")";
     this->mBlock->print();
 }
+
+void ForblkSyntax::fixLiteral(vector<string> & lines) {
+    if (this->mLeft) this->mLeft->fixLiteral(lines);
+    if (this->mExp) this->mExp->fixLiteral(lines);
+    if (this->mRight) this->mRight->fixLiteral(lines);
+    if (this->mRight) this->mBlock->fixLiteral(lines);
+}
+
+
+
+
+

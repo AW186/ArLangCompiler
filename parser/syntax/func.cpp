@@ -1,4 +1,5 @@
 #include "../syntax.hpp"
+#include "func.hpp"
 #include <sstream>
 
 FuncSyntax::FuncSyntax(string type, string id, ArgsSyntax *args, ExecBlockSyntax *blk) {
@@ -65,3 +66,23 @@ void CallSyntax::print() {
     this->mExps->print();
     cout << ")";
 }
+
+void CallSyntax::fixLiteral(vector<string> & lines) {
+    this->mExps->fixLiteral(lines);
+}
+
+void FuncSyntax::fixLiteral(vector<string> & lines) {
+    this->mBlock->fixLiteral(lines);
+}
+
+void FuncSyntax::declaration(vector<string> & lines) {
+    lines.push_back(this->getSymbol().name);
+}
+
+
+
+
+
+
+
+
