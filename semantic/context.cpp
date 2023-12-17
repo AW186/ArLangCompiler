@@ -209,6 +209,7 @@ void ContextController::pop() {
 
 void ContextController::push() {
     this->top = new Context(this->top->getGST(), this->top);
+    this->argc = 0;
 }
 
 string ContextController::useRegisterForImm(string imm, int &reg) {
@@ -281,6 +282,24 @@ string ContextController::addSymbol(Symbol sybl) {
     stringstream ss;
     ss << "    sub rsp, " << typeSize[sybl.type] << endl;
     return ss.str();
+}
+string argRegs[6] = {
+    "rdi",
+    "rsi",
+    "rdx",
+    "rcx",
+    "r8",
+    "r9",
+};
+string ContextController::declArg(Symbol sybl) {
+    this->top->addSymbol(sybl);
+    stringstream ss;
+    ss << "push " << argRegs[this->argc++]; 
+    return ss.str();
+}
+string ContextController::assignArg(bool first) {
+    if (first) this->argc = 0;
+    return argRegs[this->argc++];
 }
 string ContextController::add(Value *val1, Value *val2) {
     stringstream ss;

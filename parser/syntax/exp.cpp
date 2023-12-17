@@ -107,20 +107,25 @@ int ExpsSyntax::getType() {
 }
 #define CALLEESAVE_PLHD (8 * 7)         //rip plus six callee saved register times 8
 string ExpsSyntax::generateASMReg(ContextController *ctx, int index) {
-    stringstream ss;
+    /*
     cout << "gen asm reg" << endl;
     ss << "    mov " << registerStrings[index] << ", [rsp-" << (CALLEESAVE_PLHD + index * 8) << "]" << endl;
     
     cout << "gen asm reg" << endl;
+    return ss.str();
+
+    */
+    stringstream ss;
+    ss << "    pop " << ((index == -1) ? "rax" : ctx->assignArg(index == 0)) << endl;
     if (this->mNext) ss << this->mNext->generateASMReg(ctx, index+1);
     return ss.str();
 }
 string ExpsSyntax::generateASM(ContextController *ctx, int index) {
     stringstream ss;
     int reg;
-    ss << this->mExp->generateASM(ctx, reg);
-    ss << "    mov [rsp-" << (CALLEESAVE_PLHD + index * 8) << "], " << registerStrings[reg] << endl;
     if (this->mNext) ss << this->mNext->generateASM(ctx, index+1);
+    ss << this->mExp->generateASM(ctx, reg);
+    ss << "    push " << registerStrings[reg] << endl;
     return ss.str();
 }
 

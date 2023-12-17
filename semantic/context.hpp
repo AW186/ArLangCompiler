@@ -110,6 +110,7 @@ public:
 
 class ContextController {
     Context *top;
+    int argc = 0;
 public:
     ContextController(map<string, Symbol> gst);
     void pop();
@@ -120,6 +121,8 @@ public:
     string bnot(int regVal, int regRes);
     string mov(Value *val1, Value *val2);
     string addSymbol(Symbol sybl);
+    string declArg(Symbol sybl);
+    string assignArg(bool first);
     string add(Value *val1, Value *val2);
     string minus(Value *val1, Value *val2);
     string multiply(Value *val1, Value *val2);

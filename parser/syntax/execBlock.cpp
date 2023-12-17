@@ -67,15 +67,18 @@ void ExecBlockSyntax::print() {
 }
 
 void ExecBlockSyntax::fixLiteral(vector<string> & lines) {
+    cout << "fixing block" << endl;
     this->mLines->fixLiteral(lines);
 }
 
 void LinesSyntax::fixLiteral(vector<string> & lines) {
+    cout << "fixing lines" << endl;
     this->mLine->fixLiteral(lines);
     if (this->mNext) this->mNext->fixLiteral(lines);
 }
 
 void LineSyntax::fixLiteral(vector<string> & lines) {
+    cout << "fixing line" << endl;
     this->line->fixLiteral(lines);
 }
 

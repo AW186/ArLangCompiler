@@ -15,6 +15,7 @@ public:
     ElseblkSyntax(ExecBlockSyntax *blk);
     string generateASM(ContextController *ctx) override;
     void print() override;
+    void fixLiteral(vector<string> & lines) override;
 };
 
 class ElseifblkSyntax: public AbstractElseSyntax {
@@ -27,6 +28,7 @@ public:
     ElseifblkSyntax(ExpSyntax *exp, ExecBlockSyntax *blk, AbstractElseSyntax *el = NULL);
     string generateASM(ContextController *ctx) override;
     void print() override;
+    void fixLiteral(vector<string> & lines) override;
 };
 
 class IfblkSyntax: public AbstractLineContentSyntax {
@@ -39,6 +41,7 @@ public:
     IfblkSyntax(ExpSyntax *exp, ExecBlockSyntax *blk, AbstractElseSyntax *el = NULL);
     string generateASM(ContextController *ctx) override;
     void print() override;
+    void fixLiteral(vector<string> & lines) override;
 };
 
 #endif

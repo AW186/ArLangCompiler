@@ -89,7 +89,7 @@ void TokenSyntax::fixLiteral(vector<string> & lines) {
         stringstream ss;
         stringstream newToken;
         if (this->mToken->getVal()[0] != '\"') return;
-        ss << "imm" << immID << " " << this->mToken->getVal() << " " << (this->mToken->getVal().size() - 2) << endl;
+        ss << "imm" << immID << ": db " << this->mToken->getVal() << endl;
         newToken << "imm" << immID;
         immID++;
         this->mToken->replaceImm(newToken.str());

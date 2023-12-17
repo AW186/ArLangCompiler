@@ -1,4 +1,5 @@
 #include "../syntax.hpp"
+#include "ifblk.hpp"
 #include <sstream>
 
 int ifCount = 0;
@@ -87,3 +88,20 @@ void IfblkSyntax::print() {
     cout << ")";
     this->mBlock->print();
 }
+void IfblkSyntax::fixLiteral(vector<string> & lines) {
+    if (this->mExp) this->mExp->fixLiteral(lines);
+    if (this->mBlock) this->mBlock->fixLiteral(lines);
+    if (this->mElse) this->mElse->fixLiteral(lines);
+}
+void ElseifblkSyntax::fixLiteral(vector<string> & lines) {
+    if (this->mExp) this->mExp->fixLiteral(lines);
+    if (this->mBlock) this->mBlock->fixLiteral(lines);
+    if (this->mElse) this->mElse->fixLiteral(lines);
+}
+void ElseblkSyntax::fixLiteral(vector<string> & lines) {
+    if (this->mBlock) this->mBlock->fixLiteral(lines);
+}
+
+
+
+

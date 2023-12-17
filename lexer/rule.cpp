@@ -6,6 +6,7 @@
 
 #define ALPHA "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
 #define REG "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890"
+#define STR "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890\\ !@#$%^&*()"
 #define DIGIT "1234567890"
 
 using namespace std;
@@ -95,6 +96,7 @@ vector<State *> makeArLangRule() {
     const mask reg = getMask(REG);
     const mask digit = getMask(DIGIT);
     const mask op = getMask(",|&^!+-*(){}[];=<>");
+    const mask str = getMask(STR);
     //number
     link(states, digit, 0, 2);
     link(states, digit, 2, 2);
@@ -103,8 +105,8 @@ vector<State *> makeArLangRule() {
     link(states, digit, 4, 4);
     //string
     link(states, getMask("\""), 0, 5);
-    link(states, reg, 5, 6);
-    link(states, reg, 6, 6);
+    link(states, str, 5, 6);
+    link(states, str, 6, 6);
     link(states, getMask("\""), 6, 7);
     //id
     link(states, alpha, 0, 8);

@@ -41,16 +41,14 @@ CallSyntax::CallSyntax(string id, ExpsSyntax *exps) {
 }
 
 string CallSyntax::generateASM(ContextController *ctx) {
-    cout << "call generate asm" << endl;
     stringstream ss;
     ss << ctx->saveCaller();
-    cout << "hello world" << endl;
     ss << this->mExps->generateASM(ctx);
     if (this->mId == "syscall") {
-        cout << "sc" << endl;
-        ss << this->mExps->generateASMReg(ctx, 0);
+        ss << this->mExps->generateASMReg(ctx, -1);
         ss << "syscall" << endl;
     } else {
+        ss << this->mExps->generateASMReg(ctx, -1);
         ss << ctx->call(this->mId);
     }
     ss << ctx->popCaller();
@@ -72,6 +70,7 @@ void CallSyntax::fixLiteral(vector<string> & lines) {
 }
 
 void FuncSyntax::fixLiteral(vector<string> & lines) {
+    cout << "fixing func" << endl;
     this->mBlock->fixLiteral(lines);
 }
 
