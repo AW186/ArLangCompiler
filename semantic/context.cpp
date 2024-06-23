@@ -111,6 +111,19 @@ SymbolRep Context::getSymbol(string sybl) {
 Context * Context::pop() {
     return this->mParent;
 }
+string Context::freeRegister(int reg) {
+    stringstream ss;
+    if (!this->mRegisters[reg].empty()) {
+        string oldsybl = this->mRegisters[reg];
+        this->mRegisters[reg] = "";
+        if (getSymbol(this->mRegisters[reg]).type == ADDR) {
+            auto val = new SymbolValue(this->mRegisters[reg]);
+            ss << "    mov " << val->toString(this) << ", " << registerStrings[reg] << endl;
+        }
+    }
+    this->mRegisters[reg] = "";
+    return ss.str();
+}
 string Context::retrieveRegister(int mask, int &reg){
     mask |= (1 << _RSP) | (1 << _RBP);
     reg = -1;
@@ -123,13 +136,7 @@ string Context::retrieveRegister(int mask, int &reg){
         }
     }
     if (reg == -1) return "";
-    stringstream ss;
-    if (!this->mRegisters[reg].empty() && getSymbol(this->mRegisters[reg]).type == ADDR) {
-        auto val = new SymbolValue(this->mRegisters[reg]);
-        ss << "    mov " << val->toString(this) << ", " << registerStrings[reg] << endl;
-    }
-    this->mRegisters[reg] = "";
-    return ss.str();
+    return this->freeRegister(reg);
 }
 string Context::useRegisterFor(string sybl, int &reg) {
     auto rep = this->getSymbol(sybl);
@@ -208,6 +215,7 @@ void ContextController::pop() {
 }
 
 void ContextController::push() {
+    for (int i = 0; i < 16; i++) this->top->freeRegister(i);
     this->top = new Context(this->top->getGST(), this->top);
     this->argc = 0;
 }

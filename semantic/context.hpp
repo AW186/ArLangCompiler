@@ -82,6 +82,7 @@ public:
     void addSymbol(Symbol sybl);
     SymbolRep getSymbol(string sybl);
     void updateUseReg(int reg);
+    string freeRegister(int reg);
     string useRegisterFor(string sybl, int &reg);
     string retrieveRegister(int mask, int &reg);
     int getOffset();
