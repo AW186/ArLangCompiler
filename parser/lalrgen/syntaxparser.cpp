@@ -39,18 +39,18 @@ action lalrtable[15][10] = {
     {NA,    NA,     NA,     NA,     NA,     NA,     NA,     NA,     NA,     NA},
     {S(8),  NA,     NA,     NA,     NA,     G(2),   G(3),   NA,     G(5),   NA},
     {NA,    NA,     NA,     NA,     ACK,    NA,     NA,     NA,     NA,     NA},
-    {NA,    NA,     NA,     S(4),   R(1),   NA,     NA,     NA,     NA,     NA},
+    {NA,    NA,     NA,     S(4),   RD(1),   NA,     NA,     NA,     NA,     NA},
     {S(8),  NA,     NA,     NA,     NA,     G(11),  G(3),   NA,     G(5),   NA},
     {NA,    NA,     S(6),   NA,     NA,     NA,     NA,     NA,     NA,     NA},
     {S(8),  NA,     NA,     NA,     NA,     NA,     NA,     G(12),  G(7),   NA},
-    {S(8),  NA,     NA,     R(5),   R(5),   NA,     NA,     G(14),  G(7),  NA},
+    {S(8),  NA,     NA,     RD(5),   RD(5),   NA,     NA,     G(14),  G(7),  NA},
     {NA,    S(9),   NA,     NA,     NA,     NA,     NA,     NA,     NA,     G(10)},
-    {R(8),  S(9),   R(8),   R(8),   R(8),   NA,     NA,     NA,     NA,     G(13)},
-    {R(6),  NA,     R(6),   R(6),   R(6),   NA,     NA,     NA,     NA,     NA},
-    {NA,    NA,     NA,     NA,     R(2),   NA,     NA,     NA,     NA,     NA},
-    {NA,    NA,     NA,     R(3),   R(3),   NA,     NA,     NA,     NA,     NA},
-    {R(7),  NA,     R(7),   R(7),   R(7),   NA,     NA,     NA,     NA,     NA},
-    {NA,    NA,     NA,     R(4),   R(4),     NA,     NA,     NA,     NA,     NA}
+    {RD(8),  S(9),   RD(8),   RD(8),   RD(8),   NA,     NA,     NA,     NA,     G(13)},
+    {RD(6),  NA,     RD(6),   RD(6),   RD(6),   NA,     NA,     NA,     NA,     NA},
+    {NA,    NA,     NA,     NA,     RD(2),   NA,     NA,     NA,     NA,     NA},
+    {NA,    NA,     NA,     RD(3),   RD(3),   NA,     NA,     NA,     NA,     NA},
+    {RD(7),  NA,     RD(7),   RD(7),   RD(7),   NA,     NA,     NA,     NA,     NA},
+    {NA,    NA,     NA,     RD(4),   RD(4),     NA,     NA,     NA,     NA,     NA}
 };
 
 typedef struct stackblk {

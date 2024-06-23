@@ -1,10 +1,15 @@
 all: allobj
 
+prelink: 
+	# g++ -o acc product/obj/*.o
 
-allobj: main.cpp parserobj semanticobj lexerobj
+finallink:
+	g++ -g acc.o `llvm-config --cxxflags --ldflags --system-libs --libs core` -o acc
+
+allobj: main.cpp parserobj lexerobj semanticobj
 	g++ -c *.cpp
 	cp *.o product/obj
-	g++ -o acc product/obj/*.o
+	g++ -g product/obj/*.o `llvm-config --cxxflags --ldflags --system-libs --libs core` -o acc
 	rm ./*.o
 
 parserobj: ./parser
@@ -15,3 +20,6 @@ semanticobj: ./semantic
 
 lexerobj: ./lexer
 	cd lexer && $(MAKE)
+
+clean:
+	rm ./product/obj/*

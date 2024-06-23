@@ -17,3 +17,6 @@ void AbstractSyntax::declaration(vector<string> & lines) {
 
 }
 
+ llvm::Value * AbstractSyntax::codegen() {
+     return nullptr;
+ }

@@ -51,7 +51,7 @@ lalrtable:
 #define NA (createAction(FAIL, 0))
 #define S(a) (createAction(SHIFT, a))
 #define G(a) (createAction(GOTO, a))
-#define R(a) (createAction(REDUCE, a))
+#define RD(a) (createAction(REDUCE, a))
 #define ACK (createAction(ACCEPT, 0))
 
 using namespace std;
