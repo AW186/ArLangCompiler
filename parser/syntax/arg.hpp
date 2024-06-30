@@ -12,7 +12,7 @@ private:
     string mId;
     ArgsSyntax *mNext;
 public:
-    // llvm::Value * codegen() override;
+    llvm::Value * codegen() override;
     ArgsSyntax(string type, string id, ArgsSyntax *next);
     int getType() override;
     string generateASM(ContextController *ctx) override;

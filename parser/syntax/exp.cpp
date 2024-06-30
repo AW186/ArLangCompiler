@@ -8,7 +8,7 @@ ExpSyntax::ExpSyntax(AbstractSyntax *lexp, TokenSyntax *op, ExpSyntax *rexp) {
     this->mExp = rexp;
 }
 
-ExpSyntax::ExpSyntax(AbstractSyntax *data) {
+ExpSyntax:: ExpSyntax(AbstractSyntax *data) {
     this->mVal = data;
     this->mOp = NULL;
     this->mExp = NULL;

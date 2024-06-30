@@ -11,8 +11,9 @@ class ElseblkSyntax: public AbstractElseSyntax {
 private:
     ExecBlockSyntax *mBlock;
 public:
-    int getType() override;
     ElseblkSyntax(ExecBlockSyntax *blk);
+    llvm::Value * codegen() override;
+    int getType() override;
     string generateASM(ContextController *ctx) override;
     void print() override;
     void fixLiteral(vector<string> & lines) override;
@@ -24,8 +25,9 @@ private:
     ExecBlockSyntax *mBlock;
     AbstractElseSyntax *mElse;
 public:
-    int getType() override;
     ElseifblkSyntax(ExpSyntax *exp, ExecBlockSyntax *blk, AbstractElseSyntax *el = NULL);
+    llvm::Value * codegen() override;
+    int getType() override;
     string generateASM(ContextController *ctx) override;
     void print() override;
     void fixLiteral(vector<string> & lines) override;
@@ -37,8 +39,9 @@ private:
     ExecBlockSyntax *mBlock;
     AbstractElseSyntax *mElse;
 public:
-    int getType() override;
     IfblkSyntax(ExpSyntax *exp, ExecBlockSyntax *blk, AbstractElseSyntax *el = NULL);
+    llvm::Value * codegen() override;
+    int getType() override;
     string generateASM(ContextController *ctx) override;
     void print() override;
     void fixLiteral(vector<string> & lines) override;

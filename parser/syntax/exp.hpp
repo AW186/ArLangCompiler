@@ -15,6 +15,7 @@ class ExpSyntax: public AbstractLineContentSyntax {
 public:
     ExpSyntax(AbstractSyntax *data);
     ExpSyntax(AbstractSyntax *lexp, TokenSyntax *op, ExpSyntax *rexp);
+    llvm::Value * codegen() override;
     int getType() override;
     string generateASM(ContextController *ctx, int &reg);
     string generateASM(ContextController *ctx) override;
@@ -28,6 +29,7 @@ private:
     ExpsSyntax *mNext;
 public:
     ExpsSyntax(ExpSyntax *exp, ExpsSyntax *next);
+    llvm::Value * codegen() override;
     int getType() override;
     string generateASMReg(ContextController *ctx, int index);
     string generateASM(ContextController *ctx, int index);

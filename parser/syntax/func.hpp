@@ -16,6 +16,7 @@ class FuncSyntax: public AbstractSyntax {
     ArgsSyntax *mArgs;
 public:
     FuncSyntax(string type, string id, ArgsSyntax *args, ExecBlockSyntax *blk);
+    llvm::Value * codegen() override;
     int getType() override;
     string generateASM(ContextController *ctx) override;
     Symbol getSymbol() override;
@@ -29,6 +30,7 @@ class CallSyntax: public AbstractSyntax {
     ExpsSyntax *mExps;
 public:
     CallSyntax(string id, ExpsSyntax *exps);
+    llvm::Value * codegen() override;
     int getType() override;
     string generateASM(ContextController *ctx) override;
     void print() override;

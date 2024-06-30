@@ -14,6 +14,7 @@ class LineSyntax: public AbstractSyntax {
     int mType;
     AbstractLineContentSyntax *line;
 public:
+    llvm::Value * codegen() override;
     LineSyntax(AbstractLineContentSyntax *data);
     int getType() override;
     string generateASM(ContextController *ctx) override;
@@ -26,6 +27,7 @@ class LinesSyntax: public AbstractSyntax {
     LineSyntax *mLine;
     LinesSyntax *mNext;
 public:
+    llvm::Value * codegen() override;
     LinesSyntax(LineSyntax *line, LinesSyntax *next);
     int getType() override;
     string generateASM(ContextController *ctx) override;
@@ -36,6 +38,7 @@ public:
 class ExecBlockSyntax: public AbstractSyntax {
     LinesSyntax *mLines;
 public:
+    llvm::Value * codegen() override;
     ExecBlockSyntax(LinesSyntax *lines);
     int getType() override;
     string generateASM(ContextController *ctx) override;

@@ -12,6 +12,7 @@ class ReturnSyntax: public AbstractSyntax {
     ExpSyntax *mExp;
 public:
     explicit ReturnSyntax(ExpSyntax * exp);
+    llvm::Value * codegen() override;
     int getType() override;
     string generateASM(ContextController *ctx) override;
     void print() override;

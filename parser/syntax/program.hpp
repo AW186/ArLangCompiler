@@ -12,6 +12,7 @@ private:
     ProgramSyntax *mNext;
 public:
     ProgramSyntax(AbstractSyntax *data, ProgramSyntax *next);
+    llvm::Value * codegen() override;
     int getType() override;
     string generateASM(ContextController *ctx) override;
     void makeGST(map<string, Symbol> &gst);

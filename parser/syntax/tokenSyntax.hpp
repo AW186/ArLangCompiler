@@ -13,6 +13,7 @@ private:
     int mType;
 public:
     TokenSyntax(Token *token);
+    llvm::Value * codegen() override;
     int getType() override;
     Token *getToken();
     string generateASM(ContextController *ctx) override;

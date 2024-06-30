@@ -8,6 +8,7 @@ class DeclSyntax: public AbstractLineContentSyntax {
     string mId;
     string mType;
 public:
+    llvm::Value * codegen() override;
     DeclSyntax(string type, string id);
     int getType() override;
     string generateASM(ContextController *ctx) override;
