@@ -66,36 +66,12 @@ Token *TokenSyntax::getToken() {
     return mToken;
 }
     
-string TokenSyntax::generateASM(ContextController *ctx) {
-    return "token should not generate ASM\n";
-}
-
-
-Symbol TokenSyntax::getSymbol() {
-    return Symbol {
-        0,
-        this->mToken->getVal()
-    };
-}
-
 void TokenSyntax::print() {
     cout << "token {" << this->mType << ", " << this->mToken->getVal() << "}";
 }
 
 static int immID = 0;
 
-void TokenSyntax::fixLiteral(vector<string> & lines) {
-    if (this->mType == SYN_IMM) {
-        stringstream ss;
-        stringstream newToken;
-        if (this->mToken->getVal()[0] != '\"') return;
-        ss << "imm" << immID << ": db " << this->mToken->getVal() << endl;
-        newToken << "imm" << immID;
-        immID++;
-        this->mToken->replaceImm(newToken.str());
-        lines.push_back(ss.str());
-    }
-}
 
 
 

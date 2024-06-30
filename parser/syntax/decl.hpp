@@ -11,11 +11,7 @@ public:
     llvm::Value * codegen() override;
     DeclSyntax(string type, string id);
     int getType() override;
-    string generateASM(ContextController *ctx) override;
-    Symbol getSymbol() override;
     void print() override;
-    void declaration(vector<string> & lines) override;
-    void fixLiteral(vector<string> & lines) override;
 };
 
 #endif

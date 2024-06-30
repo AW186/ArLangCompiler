@@ -17,9 +17,7 @@ public:
     llvm::Value * codegen() override;
     LineSyntax(AbstractLineContentSyntax *data);
     int getType() override;
-    string generateASM(ContextController *ctx) override;
     void print() override;
-    void fixLiteral(vector<string> & lines) override;
 };
 
 
@@ -30,9 +28,7 @@ public:
     llvm::Value * codegen() override;
     LinesSyntax(LineSyntax *line, LinesSyntax *next);
     int getType() override;
-    string generateASM(ContextController *ctx) override;
     void print() override;
-    void fixLiteral(vector<string> & lines) override;
 };
 
 class ExecBlockSyntax: public AbstractSyntax {
@@ -41,9 +37,7 @@ public:
     llvm::Value * codegen() override;
     ExecBlockSyntax(LinesSyntax *lines);
     int getType() override;
-    string generateASM(ContextController *ctx) override;
     void print() override;
-    void fixLiteral(vector<string> & lines) override;
 };
 
 

@@ -14,9 +14,7 @@ public:
     ForblkSyntax(LineSyntax *left, ExpSyntax *mExp, LineSyntax *right, ExecBlockSyntax *blk);
     int getType() override;
     llvm::Value * codegen() override;
-    string generateASM(ContextController *ctx) override;
     void print() override;
-    void fixLiteral(vector<string> & lines) override;
 };
 
 

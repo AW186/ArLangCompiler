@@ -10,10 +10,7 @@ public:
     FileSyntax(ProgramSyntax *program);
     int getType() override;
     llvm::Value * codegen() override;
-    string generateASM(ContextController *ctx) override;
     void print() override;
-    void fixLiteral(vector<string> & lines) override;
-    void declaration(vector<string> & lines) override;
 };
 
 #endif
