@@ -1,3 +1,4 @@
+#include "arg.hpp"
 #include "../syntax.hpp"
 #include <sstream>
 #include <iostream>
@@ -17,4 +18,16 @@ int ArgsSyntax::getType() {
 void ArgsSyntax::print() {
     cout << "args " << mId << " " << mType << ", ";
     if (this->mNext) this->mNext->print();
+}
+
+size_t ArgsSyntax::size() {
+    return 1 + (mNext ? mNext->size() : 0);
+}
+
+ArgsSyntax * ArgsSyntax::next() {
+    return mNext;
+}
+
+string ArgsSyntax::getName() {
+    return mId;
 }

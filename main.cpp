@@ -17,5 +17,6 @@ int main() {
     printMapping(table->getMapping());
     auto syntax = makeSyntaxTree(new Lexer(new FileReader("./lexer/test.al"), makeArLangRule()), table->getTable(), table->getMapping());
     syntax->print();
+    syntax->codegen();
     cout << "type " << syntax->getType() << endl;
 }

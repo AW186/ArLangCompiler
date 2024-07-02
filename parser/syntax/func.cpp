@@ -2,11 +2,30 @@
 #include "func.hpp"
 #include <sstream>
 
-FuncSyntax::FuncSyntax(string type, string id, ArgsSyntax *args, ExecBlockSyntax *blk) {
+ProtoSyntax::ProtoSyntax(string type, string id, ArgsSyntax *args) {
     mType = type;
     mId = id;
-    mBlock = blk;
     mArgs = args;
+}
+
+void ProtoSyntax::print() {
+    cout << "FUNC(";
+    this->mArgs->print();
+    cout << ") => " << this->mType  << endl;
+}
+
+int ProtoSyntax::getType() {
+    return SYN_FUNC;
+}
+
+size_t ProtoSyntax::argsSize() {
+    return this->mArgs ? this->mArgs->size() : 0;
+}
+
+FuncSyntax::FuncSyntax(string type, string id, ArgsSyntax *args, ExecBlockSyntax *blk) {
+    proto = new ProtoSyntax(type, id, args);
+    mId = id;
+    mBlock = blk;
 }
 
 int FuncSyntax::getType() {
@@ -14,9 +33,7 @@ int FuncSyntax::getType() {
 }
 
 void FuncSyntax::print() {
-    cout << "FUNC(";
-    this->mArgs->print();
-    cout << ") => " << this->mType  << endl;
+    this->proto->print();
     this->mBlock->print();
 }
 
@@ -35,3 +52,6 @@ void CallSyntax::print() {
     cout << ")";
 }
 
+size_t FuncSyntax::argsSize() {
+    return this->proto->argsSize();
+}

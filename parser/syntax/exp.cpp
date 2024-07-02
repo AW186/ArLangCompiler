@@ -46,3 +46,10 @@ void ExpsSyntax::print() {
     cout << ")";
 }
 
+size_t ExpsSyntax::size() {
+    return 1 + (mNext ? mNext->size() : 0);
+}
+
+ExpsSyntax * ExpsSyntax::getNext() {
+    return mNext;
+}

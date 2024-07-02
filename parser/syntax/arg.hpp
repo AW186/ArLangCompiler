@@ -16,6 +16,9 @@ public:
     ArgsSyntax(string type, string id, ArgsSyntax *next);
     int getType() override;
     void print() override;
+    size_t size();
+    ArgsSyntax * next();
+    string getName();
 };
 
 #endif

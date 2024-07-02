@@ -29,6 +29,8 @@ public:
     llvm::Value * codegen() override;
     int getType() override;
     void print() override;
+    size_t size();
+    ExpsSyntax *getNext();
 };
 
 #endif

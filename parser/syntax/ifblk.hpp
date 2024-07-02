@@ -2,9 +2,15 @@
 #define IFBLK_HPP
 
 #include "../syntax.hpp"
+#include <llvm/IR/Value.h>
 
 class AbstractElseSyntax: public AbstractSyntax {
-
+protected:
+    llvm::BasicBlock *elseblk;
+public:
+    void setElseBlk(llvm::BasicBlock *elseblk) {
+        this->elseblk = elseblk;
+    }
 };
 
 class ElseblkSyntax: public AbstractElseSyntax {
