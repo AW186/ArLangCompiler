@@ -2,13 +2,13 @@
 #ifndef RETURN_HPP
 #define RETURN_HPP
 
-#include "abstractSyntax.hpp"
+#include "execBlock.hpp"
 #include "exp.hpp"
 #include <iostream>
 
 using namespace std;
 
-class ReturnSyntax: public AbstractSyntax {
+class ReturnSyntax: public AbstractLineContentSyntax{
     ExpSyntax *mExp;
 public:
     explicit ReturnSyntax(ExpSyntax * exp);

@@ -15,6 +15,7 @@ map<string, int> getIdMap() {
     idMap["else"]   = ELSE;
     idMap["for"]    = FOR;
     idMap["while"]  = WHILE;
+    idMap["return"] = RETURN;
     return idMap;
 }
 

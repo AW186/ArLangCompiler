@@ -56,7 +56,7 @@ typedef auto (*reduce_fun)(deque<stackblk> &) -> stackblk;
 
 */
 
-#define ARLANG_RULES 35
+#define ARLANG_RULES 38
 
 extern reduce_fun reduce[];
 

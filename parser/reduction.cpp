@@ -1,5 +1,7 @@
 
 #include "reduction.hpp"
+#include "syntax/execBlock.hpp"
+#include "syntax/file.hpp"
 #include "syntax/return.hpp"
 #include <stdio.h>
 #include <deque>
@@ -81,9 +83,11 @@ stackblk pop(deque<stackblk> &stack, int type) {
 // /FILE>/PROGRAM/END
 stackblk r0(deque<stackblk> &stack) {
     printf("accepted\n");
+    stackblk res;
     auto entry = stack.front();
     stack.pop_back();
-    return entry;
+    res.data = new FileSyntax(PROGRAM_T(entry));
+    return res;
 }
 // /ARGS>/TYPE/ID/COMMA/ARGS
 stackblk r1(deque<stackblk> &stack) {
@@ -314,18 +318,20 @@ stackblk r25(deque<stackblk> &stack) {
     res.data    = new LineSyntax(IF_T(ifblk));
     return res;
 }
-// /SYN_ELSEBLK>/SYN_ELSE/SYN_BLOCK
+// /SYN_ELSEBLK>/SYN_ELSE/SYN_BLOCK/ENDL
 stackblk r26(deque<stackblk> &stack) {
     stackblk res;
+    auto endl = pop(stack, SYN_ENDL);
     auto blk = pop(stack, SYN_BLOCK);
     auto el  = pop(stack, SYN_ELSE);
     res.data = new ElseblkSyntax(BLOCK_T(blk));
     return res;
 }
-// /SYN_ELIFBLK>/SYN_ELIF/SYN_EXP/SYN_BLOCK
+// /SYN_ELIFBLK>/SYN_ELIF/SYN_EXP/SYN_BLOCK/ENDL
 
 stackblk r27(deque<stackblk> &stack) {
     stackblk res;
+    auto endl = pop(stack, SYN_ENDL);
     auto blk    = pop(stack, SYN_BLOCK);
     auto exp    = pop(stack, SYN_EXP);
     auto elif   = pop(stack, SYN_ELIF);
@@ -354,10 +360,11 @@ stackblk r29(deque<stackblk> &stack) {
     res.data        = new ElseifblkSyntax(EXP_T(exp), BLOCK_T(blk), ELIF_T(elifblk));
     return res;
 }
-// /SYN_IFBLK>/SYN_IF/SYN_EXP/SYN_BLOCK
+// /SYN_IFBLK>/SYN_IF/SYN_EXP/SYN_BLOCK/ENDL
 
 stackblk r30(deque<stackblk> &stack) {
     stackblk res;
+    auto endl = pop(stack, SYN_ENDL);
     auto blk    = pop(stack, SYN_BLOCK);
     auto exp    = pop(stack, SYN_EXP);
     auto ifsyn  = pop(stack, SYN_IF);
@@ -372,7 +379,7 @@ stackblk r31(deque<stackblk> &stack) {
     auto blk    = pop(stack, SYN_BLOCK);
     auto exp    = pop(stack, SYN_EXP);
     auto ifsyn  = pop(stack, SYN_IF);
-    res.data    = new ElseifblkSyntax(EXP_T(exp), BLOCK_T(blk), ELSE_T(elblk));
+    res.data    = new IfblkSyntax(EXP_T(exp), BLOCK_T(blk), ELSE_T(elblk));
     return res;
 }
 
@@ -429,7 +436,7 @@ stackblk r37(deque<stackblk> &stack) {
     auto end    = pop(stack, SYN_ENDL);
     auto exp    = pop(stack, SYN_EXP);
     auto ret    = pop(stack, SYN_RET);
-    res.data    = new ReturnSyntax(EXP_T(exp));
+    res.data    = new LineSyntax(new ReturnSyntax(EXP_T(exp)));
     return res;
 }
 reduce_fun reduce[ARLANG_RULES] = {
@@ -467,5 +474,8 @@ reduce_fun reduce[ARLANG_RULES] = {
     r31,
     r32,
     r33,
-    r34
+    r34,
+    r35,
+    r36,
+    r37
 };

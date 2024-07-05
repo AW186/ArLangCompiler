@@ -2,9 +2,11 @@
 #include "codegen.hpp"
 #include "../parser/syntax.hpp"
 #include <llvm/IR/Constants.h>
+#include <sstream>
 #include <string>
 
-llvm::Value *LogErrorV(const char *Str) {
+llvm::Value *LogErrorV(const char *Str, int line) {
+    cout << "Error at line " << line << ": " << Str << endl;
     return nullptr;
 }
 
@@ -18,7 +20,7 @@ struct NamedValueStackNode {
     llvm::Value * set(string name, llvm::Value * val) {
         if (values.count(name)) return values[name] = val;
         else if (parent) return parent->set(name, val);
-        else return LogErrorV("undefined variable");
+        else return values[name] = val;
     }
     bool count(string name) {
         return values.count(name) || (parent && parent->count(name));
@@ -72,15 +74,18 @@ llvm::Value * ArgsSyntax::codegen() {
 }
 
 llvm::Value * DeclSyntax::codegen() {
+    cout << "Declare codegen" << endl;
     NamedValues->set(this->mId, nullptr);
     return nullptr;
 }
 llvm::Value * LinesSyntax::codegen() {
+    cout << "Lines codegen" << endl;
+    mLine->codegen();
     if (mNext) mNext->codegen();
-    mNext->mLine->codegen();
     return nullptr;
 }
 llvm::Value * LineSyntax::codegen() {
+    cout << "Line codegen" << endl;
     this->line->codegen();
     return nullptr;
 }
@@ -94,11 +99,15 @@ llvm::Value * ExpsSyntax::codegen() {
     return nullptr;
 }
 llvm::Value * ExpSyntax::codegen() {
+    cout << "exp codegen" << endl;
+    this->print();
+    cout << endl;
     auto left = this->mVal->codegen();
     if (this->mOp) {
         auto right = this->mExp->codegen();
-        if (!left || !right) return nullptr;
-        switch (this->mOp->getType()) {
+        if (!right) return nullptr;
+        cout << "op type " << this->mOp->getType() << endl;
+        switch (this->mOp->getToken()->getKind()) {
             case OR:
                 return Builder->CreateOr(left, right);
             case XOR:
@@ -106,6 +115,8 @@ llvm::Value * ExpSyntax::codegen() {
             case AND:
                 return Builder->CreateAnd(left, right);
             case PLUS:
+                cout << "make Add" << endl;
+                if (!left) cout << "FAILED" << endl;
                 return Builder->CreateFAdd(left, right);
             case MINUS:
                 return Builder->CreateFSub(left, right);
@@ -117,15 +128,19 @@ llvm::Value * ExpSyntax::codegen() {
                 if (mVal->getType() != SYN_ID) {
                     return nullptr;
                 }
-                if (!NamedValues->count(((TokenSyntax *)this->mVal)->getToken()->getVal())) return LogErrorV("Variable name undefined");
+                if (!NamedValues->count(((TokenSyntax *)this->mVal)->getToken()->getVal())) return LogErrorV("Variable name undefined", __LINE__);
                 return NamedValues->set(((TokenSyntax *)this->mVal)->getToken()->getVal(), right);
             default:
+                cout << "failed to make exp" << endl;
                 break;
         }
     }
+    cout << "exp finished" << endl;
     return left;
 }
 llvm::Value * FileSyntax::codegen() {
+    InitializeModule();
+    cout << "File codegen" << endl;
     this->mProgram->codegen();
     TheModule->print(errs(), nullptr);
     return nullptr;
@@ -161,19 +176,21 @@ llvm::Value * ForblkSyntax::codegen() {
 }
 llvm::Value * CallSyntax::codegen() {
     llvm::Function * calleeFunc = TheModule->getFunction(this->mId);
-    if (!calleeFunc) return LogErrorV("undefined reference");
+    if (!calleeFunc) return LogErrorV("undefined reference", __LINE__);
     if (this->mExps ? this->mExps->size() != calleeFunc->arg_size() : calleeFunc->arg_size() == 0)
-        return LogErrorV("wrong input size for callee func");
+        return LogErrorV("wrong input size for callee func", __LINE__);
     std::vector<llvm::Value *> args;
     for (auto exp = this->mExps; exp; exp = exp->getNext()) {
-        args.push_back(exp->codegen());
+        args.push_back(exp->getExp()->codegen());
         if (!args.back())
-            return LogErrorV("failed to generate code for args");
+            return LogErrorV("failed to generate code for args", __LINE__);
     }
+    cout << "call codegen" << endl;
     return Builder->CreateCall(calleeFunc, args, "calltemp");
 }
 llvm::Value * ProtoSyntax::codegen() {
     // Make the function type:  double(double,double) etc.
+    cout << "Proto codegen" << endl;
     std::vector<Type*> Doubles(this->argsSize(),
             Type::getDoubleTy(*TheContext));
     FunctionType *FT =
@@ -190,16 +207,19 @@ llvm::Value * ProtoSyntax::codegen() {
     return func;
 }
 llvm::Value * FuncSyntax::codegen() {
+    cout << "Func codegen" << endl;
     llvm::Function * func = TheModule->getFunction(this->mId);
     if (!func) func = (llvm::Function *)this->proto->codegen();
-    if (!func || !func->empty()) return LogErrorV("redefine or undefine");
+    if (!func || !func->empty()) return LogErrorV("redefine or undefine", __LINE__);
 
     BasicBlock *blk = BasicBlock::Create(*TheContext, "entry", func);
     Builder->SetInsertPoint(blk);
 
     // Record the function arguments in the NamedValues map.
-    for (auto &Arg : func->args())
+    for (auto &Arg : func->args()) {
         NamedValues->set(std::string(Arg.getName()), &Arg);
+        cout << "set " << string(Arg.getName()) << endl;
+    }
 
     this->mBlock->codegen();
 
@@ -273,8 +293,9 @@ llvm::Value * ElseblkSyntax::codegen() {
     return nullptr;
 }
 llvm::Value * ProgramSyntax::codegen() {
+    cout << "Program codegen" << endl;
     this->mContent->codegen();
-    this->mNext->codegen();
+    if (mNext) this->mNext->codegen();
     return nullptr;
 }
 llvm::Value * ReturnSyntax::codegen() {
@@ -311,7 +332,7 @@ llvm::Value * TokenSyntax::codegen() {
         case SYN_ID:
             return NamedValues->get(this->mToken->getVal());
         default:
-            return LogErrorV("wrong token");
+            return LogErrorV("wrong token", __LINE__);
     }
 }
 

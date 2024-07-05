@@ -7,10 +7,10 @@ main.o: main.cpp lexer.hpp reader.hpp rule.hpp
 	g++ -c main.cpp
 
 rule.o: rule.cpp lexer.hpp reader.hpp rule.hpp
-	g++ -c rule.cpp
+	g++ -g -c rule.cpp
 
 lexer.o: lexer.cpp lexer.hpp reader.hpp rule.hpp
-	g++ -c lexer.cpp
+	g++ -g -c lexer.cpp
 
 clean:
 	rm *.o

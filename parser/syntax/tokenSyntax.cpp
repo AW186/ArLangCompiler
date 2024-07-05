@@ -46,6 +46,7 @@ vector<int> getSynMap() {
     synMap[LESS] = SYN_OP;
     synMap[GREATER] = SYN_OP;
     synMap[COMMA] = SYN_COMMA;
+    synMap[RETURN] = SYN_RET;
     return synMap;
 };
 

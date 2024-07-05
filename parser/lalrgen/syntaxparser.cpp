@@ -149,6 +149,7 @@ map<int, int> getMap() {
     res[E] = 7;
     res[I] = 8;
     res[D] = 9;
+    res['$'] = 4;
     return res;
 }
 
@@ -278,16 +279,16 @@ File *parse(Reader *reader) {
     int c = reader->getc();
     int next = c;
     map<int, int> dict = getMap();
-    // printf("State g%d\n", state);
-    // printf("%c\n", *(char *)((int *)(&next)));
+    printf("State g%d\n", state);
+    printf("%c\n", *(char *)((int *)(&next)));
     int count = next == '\n' || next == '\r';
     while (1) {
-        // printf("next id: %d, char: %c\n", next, next);
+        printf("next id: %d, char: %c\n", next, next);
         action act = lalrtable[state][dict[next]];
         switch (act.type)
         {
         case FAIL:
-            // printf("Syntax error on state %d, at line %d, with entry %d\n", state, count, next);
+            printf("Syntax error on state %d, at line %d, with entry %d\n", state, count, next);
             exit(-1);
         case SHIFT:
             state = act.num;
@@ -295,24 +296,24 @@ File *parse(Reader *reader) {
             c = reader->getc();
             next = c;            
             count += next == '\n' || next == '\r';
-            // printf("State s%d\n", state);
-            // printf("id: %d, char: %c\n", next, next);
+            printf("State s%d\n", state);
+            printf("id: %d, char: %c\n", next, next);
             break;
         case GOTO:
             state = act.num;
             buffer.state = state;
             stack.push_back(buffer);
             next = c;
-            // printf("State g%d\n", state);
+            printf("State g%d\n", state);
             break;
         case REDUCE:
             buffer = sreduce[act.num](stack);
             next = buffer.type;
             state = !stack.empty() ? stack.back().state : 1;
-            // printf("State r%d, to state %d\n", act.num, state);
+            printf("State r%d, to state %d\n", act.num, state);
             break;
         case ACCEPT:
-            // printf("finish stack size: %d\n", stack.size());
+            printf("finish stack size: %d\n", stack.size());
             return stack.back().u.file;
         default:
             break;

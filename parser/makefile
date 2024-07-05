@@ -12,6 +12,6 @@ clean: ./*.o
 	rm ./*.o
 
 myobj: ./*.cpp ./*.hpp ./syntax/*.hpp ./lalrgen/*.hpp ../lexer/*.hpp
-	g++ -c *.cpp
+	g++ -g -c *.cpp
 	cp ./*.o ../product/obj
 

@@ -20,22 +20,22 @@ AbstractSyntax *makeSyntaxTree(Lexer *lex, vector<vector<action>> lrtable, map<i
     deque<stackblk> stack;
     stackblk buffer;
     TokenSyntax *c = new TokenSyntax(lex->nextToken());
-    // printf("token %d: %s\n", c->getType(), c->getToken()->getVal().c_str());
+    printf("token %d: %s\n", c->getType(), c->getToken()->getVal().c_str());
     AbstractSyntax *next = c;
     while (1) {
         action act = lrtable[state][mapping[next->getType()]];
-        // printf("action %d %d\n", act.type, act.num);
+        printf("action %d %d\n", act.type, act.num);
         switch (act.type)
         {
         case FAIL:
-            // printf("Syntax error on state %d, with entry %d\n", state, next->getType());
+            printf("Syntax error on state %d, with entry %d\n", state, next->getType());
             exit(-1);
         case SHIFT:
             state = act.num;
             stack.push_back(makeStackBlk(state, next));
             c = new TokenSyntax(lex->nextToken());
             next = c;
-            // printf("token %d: %s\n", c->getType(), c->getToken()->getVal().c_str());
+            printf("token %d: %s\n", c->getType(), c->getToken()->getVal().c_str());
             break;
         case GOTO:
             state = act.num;
@@ -44,12 +44,13 @@ AbstractSyntax *makeSyntaxTree(Lexer *lex, vector<vector<action>> lrtable, map<i
             next = c;
             break;
         case REDUCE:
+            printf("reduce %d\n", act.num);
             buffer = reduce[act.num](stack);
             next = buffer.data;
             state = !stack.empty() ? stack.back().state : 0;
             break;
         case ACCEPT:
-            return stack.front().data;
+            return reduce[0](stack).data;
         default:
             break;
         }

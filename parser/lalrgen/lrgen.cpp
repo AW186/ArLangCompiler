@@ -1,4 +1,5 @@
 #include "lrgen.hpp"
+#include <cstdio>
 #include <deque>
 
 /***************************************************
@@ -440,6 +441,7 @@ map<int, int> LRTable::getMapping() {
 }
 
 LRTable *getDefaultLRTable() {
-    File *file = parse(new FileReader("syntax2.lr"));
+    File *file = parse(new FileReader("./grammar/syntax2.lr"));
+    printf("lrtable file read succedd\n");
     return new LRTable(file);
 }

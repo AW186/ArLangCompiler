@@ -30,6 +30,9 @@ public:
     int getType() override;
     void print() override;
     size_t size();
+    ExpSyntax *getExp() {
+        return mExp;
+    }
     ExpsSyntax *getNext();
 };
 

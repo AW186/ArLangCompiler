@@ -7,7 +7,7 @@ finallink:
 	g++ -g acc.o `llvm-config --cxxflags --ldflags --system-libs --libs core` -o acc
 
 allobj: main.cpp parserobj lexerobj codegenobj
-	g++ -c *.cpp
+	g++ -g -c *.cpp
 	cp *.o product/obj
 	g++ -g product/obj/*.o `llvm-config --cxxflags --ldflags --system-libs --libs core` -o acc
 	rm ./*.o
