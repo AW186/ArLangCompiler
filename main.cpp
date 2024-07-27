@@ -1,4 +1,6 @@
+#include "codegen/codegen.hpp"
 #include "parser/parser.hpp"
+#include "parser/syntax/file.hpp"
 #include <fstream>
 #include <map>
 #include <iostream>
@@ -11,8 +13,8 @@ void printMapping(map<int, int> dict) {
 }
 
 int main(int argc, char * argv[]) {
-    if (argc < 2) {
-        printf("please enter a file\n");
+    if (argc < 3) {
+        printf("please enter input and output file\n");
         return -1;
     }
     printf("start compile\n");
@@ -22,5 +24,9 @@ int main(int argc, char * argv[]) {
     auto syntax = makeSyntaxTree(new Lexer(new FileReader(argv[1]), makeArLangRule()), table->getTable(), table->getMapping());
     cout << "type " << syntax->getType() << endl;
     syntax->print();
-    syntax->codegen();
+    if (syntax->getType() != SYN_FILE) {
+        cout << "ERROR: parsing failed" << endl;
+    }
+    codegen_dump((FileSyntax *)syntax, string(argv[1]), string(argv[2]));
 }
+

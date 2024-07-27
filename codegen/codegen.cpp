@@ -1,9 +1,21 @@
-
-#include "codegen.hpp"
-#include "../parser/syntax.hpp"
+#include <fstream>
+#include <iostream>
 #include <llvm/IR/Constants.h>
-#include <sstream>
+#include <llvm/Support/raw_ostream.h>
 #include <string>
+#include "llvm/ADT/APFloat.h"
+#include "llvm/IR/BasicBlock.h"
+#include "llvm/IR/Constants.h"
+#include "llvm/IR/DerivedTypes.h"
+#include "llvm/IR/Function.h"
+#include "llvm/IR/IRBuilder.h"
+#include "llvm/IR/LLVMContext.h"
+#include "llvm/IR/Module.h"
+#include "llvm/IR/Type.h"
+#include "llvm/IR/Verifier.h"
+#include "codegen.hpp"
+
+using namespace llvm;
 
 llvm::Value *LogErrorV(const char *Str, int line) {
     cout << "Error at line " << line << ": " << Str << endl;
@@ -60,10 +72,10 @@ static std::unique_ptr<IRBuilder<>> Builder;
 static std::unique_ptr<Module> TheModule;
 static NamedValueStack * NamedValues;
 
-static void InitializeModule() {
+static void InitializeModule(string filename) {
     // Open a new context and module.
     TheContext = std::make_unique<LLVMContext>();
-    TheModule = std::make_unique<Module>("my cool jit", *TheContext);
+    TheModule = std::make_unique<Module>(filename, *TheContext);
     // Create a new builder for the module.
     Builder = std::make_unique<IRBuilder<>>(*TheContext);
     NamedValues = new NamedValueStack();
@@ -139,10 +151,8 @@ llvm::Value * ExpSyntax::codegen() {
     return left;
 }
 llvm::Value * FileSyntax::codegen() {
-    InitializeModule();
     cout << "File codegen" << endl;
     this->mProgram->codegen();
-    TheModule->print(errs(), nullptr);
     return nullptr;
 }
 llvm::Value * ForblkSyntax::codegen() {
@@ -337,6 +347,18 @@ llvm::Value * TokenSyntax::codegen() {
 }
 
 
+void codegen_dump(FileSyntax * file, string src_path, string dst_path) {
+    string s;
+    raw_string_ostream ss(s);
+    ofstream dumpfile;
+    dumpfile.open(dst_path);
+    InitializeModule(src_path);
+    file->codegen();
+    TheModule->print(ss, nullptr);
+    dumpfile << ss.str();
+    cout << ss.str() << endl;
+    dumpfile.close();
+}
 
 
 
